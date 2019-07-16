@@ -7,12 +7,12 @@ add_subdirectory(extern/pybind11)
 
 if(MSVC)
     add_compile_options("/W4" "/Ox" "/fp:fast")
+    set(PYBIND11_CPP_STANDARD /std:c++latest)
 endif()
 if(UNIX)
     add_compile_options("-Ofast" "-std=c++17")
+    set(PYBIND11_CPP_STANDARD -std=c++17)
 endif()
-
-set(PYBIND11_CPP_STANDARD -std=c++17)
 
 pybind11_add_module(_affine_transform src/main.cpp)
 target_include_directories(_affine_transform PUBLIC "extern/eigen")
