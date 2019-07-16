@@ -10,21 +10,21 @@ matrix:
           packages:
             - ca-certificates
             - libc++-dev
-            - g++-7
+            - g++-8
             - libiomp-dev
-            - cmake
           sources:
           - sourceline: 'ppa:ubuntu-toolchain-r/test'
-      dist: trusty
+      dist: xenial
       
 install:
+  - export CC=gcc-8
+  - export CXX=g++-8
   - pip3 install setuptools
   - pip3 install codecov
   - python3 setup.py develop
   
 script:
   - python3 -m coverage run setup.py test
-  - python3 -m coverage combine
   
 after_sucess:
   - codecov
