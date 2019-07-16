@@ -1,0 +1,13 @@
+﻿---
+AlwaysBreakTemplateDeclarations: 'true'
+BreakBeforeBraces: Allman
+ColumnLimit: '80'
+IndentWidth: '4'
+Language: Cpp
+PointerAlignment: Left
+IndentCaseLabels: false
+AccessModifierOffset: '-4'
+AllowAllParametersOfDeclarationOnNextLine: 'true'
+ConstructorInitializerAllOnOneLineOrOnePerLine: 'true'
+
+...
