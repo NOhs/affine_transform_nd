@@ -25,7 +25,6 @@ install:
   
 script:
   - python3 -m coverage run setup.py test
-  - python3 -m coverage combine
   
 after_sucess:
   - codecov
