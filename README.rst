@@ -17,8 +17,6 @@ Short example usage
 -------------------
 
 .. code-block:: python
-    :language: python
-    :linenos:
 
     import numpy as np
 
