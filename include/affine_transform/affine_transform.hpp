@@ -24,57 +24,6 @@
  */
 namespace affine_transform
 {
-/*! \brief Extracts an image from a given one with a given
- *         coordinate system.
- *
- *  @param[in] origin            The origin of the coordinate system for the
- *                               resulting image in the coordinate system of
- *                               the input system.
- *  @param[in] dx                The vectors of the coordinate system of the
- *                               resulting image in the coordinate system of the
- *                               input system.
- *  @param[in] input_image       The image from which to extract data
- *  @param[in,out] output_image  The image in which to store the results
- *  @param[in] background_value  The value to use for points outside the input
- *                               image's domain. Might be ignored by some
- *                               boundary functions.
- *
- *  @tparam Dim                  The dimensionality of the image data
- *  @tparam T                    The datatype of the image data
- *  @tparam Func                 The interpolation order to use
- *  @tparam BoundaryFunc         The boundary function to use
- */
-template <int Dim, typename T, template <typename> typename Func,
-          typename BoundaryFunc>
-void transform(const Eigen::Matrix<double, Dim, 1>& origin,
-               const std::array<Eigen::Matrix<double, Dim, 1>, Dim>& dx,
-               const pybind11::array_t<T>& input_image,
-               pybind11::array_t<T>& output_image, T background_value)
-{
-    auto input = input_image.template unchecked<Dim>();
-    auto output = output_image.template mutable_unchecked<Dim>();
-
-#pragma omp parallel
-    {
-        typedef Func<T> _Func;
-
-        interpolation::Data<_Func, Dim> chunk;
-
-        int x_len = output.shape(0) / omp_get_num_threads();
-        int x_start = x_len * omp_get_thread_num();
-        int x_end = x_start + x_len;
-
-        Eigen::Matrix<double, Dim, 1> local_origin = origin + x_start * dx[0];
-        if (omp_get_thread_num() == omp_get_num_threads() - 1)
-        {
-            x_end = output.shape(0);
-        }
-        detail::transform_loop<Dim, T, _Func, BoundaryFunc>(
-            local_origin, input, output, dx, chunk, background_value, x_start,
-            x_end);
-    }
-}
-
 /*! \brief Namespace containing implementation details for the affine
  *         transformation functionality.
  */
@@ -153,4 +102,56 @@ constexpr void transform_loop(
     }
 }
 }; // namespace detail
+
+/*! \brief Extracts an image from a given one with a given
+ *         coordinate system.
+ *
+ *  @param[in] origin            The origin of the coordinate system for the
+ *                               resulting image in the coordinate system of
+ *                               the input system.
+ *  @param[in] dx                The vectors of the coordinate system of the
+ *                               resulting image in the coordinate system of the
+ *                               input system.
+ *  @param[in] input_image       The image from which to extract data
+ *  @param[in,out] output_image  The image in which to store the results
+ *  @param[in] background_value  The value to use for points outside the input
+ *                               image's domain. Might be ignored by some
+ *                               boundary functions.
+ *
+ *  @tparam Dim                  The dimensionality of the image data
+ *  @tparam T                    The datatype of the image data
+ *  @tparam Func                 The interpolation order to use
+ *  @tparam BoundaryFunc         The boundary function to use
+ */
+template <int Dim, typename T, template <typename> typename Func,
+          typename BoundaryFunc>
+void transform(const Eigen::Matrix<double, Dim, 1>& origin,
+               const std::array<Eigen::Matrix<double, Dim, 1>, Dim>& dx,
+               const pybind11::array_t<T>& input_image,
+               pybind11::array_t<T>& output_image, T background_value)
+{
+    auto input = input_image.template unchecked<Dim>();
+    auto output = output_image.template mutable_unchecked<Dim>();
+
+#pragma omp parallel
+    {
+        typedef Func<T> _Func;
+
+        interpolation::Data<_Func, Dim> chunk;
+
+        int x_len = output.shape(0) / omp_get_num_threads();
+        int x_start = x_len * omp_get_thread_num();
+        int x_end = x_start + x_len;
+
+        Eigen::Matrix<double, Dim, 1> local_origin = origin + x_start * dx[0];
+        if (omp_get_thread_num() == omp_get_num_threads() - 1)
+        {
+            x_end = output.shape(0);
+        }
+        detail::transform_loop<Dim, T, _Func, BoundaryFunc>(
+            local_origin, input, output, dx, chunk, background_value, x_start,
+            x_end);
+    }
+}
+
 }; // namespace affine_transform

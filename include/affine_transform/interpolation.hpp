@@ -43,7 +43,7 @@ struct Data
 {
     /*! \brief array of Dim-1 dimensional nested arrays.
      */
-    std::array<typename Data<Func, Dim - 1>, Func::NUMBER_OF_VALUES> data;
+    std::array<Data<Func, Dim - 1>, Func::NUMBER_OF_VALUES> data;
 
     /*! \brief function to access this n-dimensional data
      *
@@ -57,7 +57,7 @@ struct Data
      *
      */
     template <typename... Indices>
-    Func::template VALUE_TYPE operator()(size_t index_0,
+    typename Func::VALUE_TYPE operator()(size_t index_0,
                                          Indices... indices) const
     {
         return data[index_0](indices...);
@@ -75,7 +75,7 @@ struct Data
      *
      */
     template <typename... Indices>
-    Func::template VALUE_TYPE& operator()(size_t index_0, Indices... indices)
+    typename Func::VALUE_TYPE& operator()(size_t index_0, Indices... indices)
     {
         return data[index_0](indices...);
     }
@@ -112,7 +112,7 @@ struct Data<Func, 1>
      *           given position
      *
      */
-    Func::template VALUE_TYPE operator()(size_t index) const
+    typename Func::VALUE_TYPE operator()(size_t index) const
     {
         return data[index];
     }
@@ -126,7 +126,7 @@ struct Data<Func, 1>
      *           the given position
      *
      */
-    Func::template VALUE_TYPE& operator()(size_t index) { return data[index]; }
+    typename Func::VALUE_TYPE& operator()(size_t index) { return data[index]; }
 };
 
 /*! \brief Cause a compile error for the illegal zero dimensional case
@@ -166,7 +166,7 @@ struct linear
      *
      *  @returns   The result of the interpolation
      */
-    T operator()(const typename Data<linear<T>, 1>& p, double x)
+    T operator()(const Data<linear<T>, 1>& p, double x)
     {
         return static_cast<T>(p(0) * (1 - x) + p(1) * x);
     }
@@ -203,7 +203,7 @@ struct cubic
      *
      *  @returns   The result of the interpolation
      */
-    T operator()(const typename Data<cubic<T>, 1>& p, double x)
+    T operator()(const Data<cubic<T>, 1>& p, double x)
     {
         return static_cast<T>(
             p(1) + 0.5 * x *
@@ -213,129 +213,12 @@ struct cubic
     }
 };
 
-/*! \brief Struct for dealing with n-dimensional image boundaries by
- *         returning a constant values for coordinates out of bounds.
- */
-struct ConstantBoundary
-{
-    /*! \brief Apply the constant boundary to the given image and position.
-     *
-     *  @param[in] image            The image to sample
-     *  @param[in] voxel_position   The position at which to sample
-     *  @param[in] background_value The background value to use if the given
-     *                              position is out of bounds
-     *
-     *  @returns                    The value at the given position using the
-     *                              rules defined by ConstantBoundary for
-     *                              positions outside of the given image.
-     *
-     *  @tparam T                   The data type of the given image
-     *  @tparam Dim                 The dimensions of the given image
-     */
-    template <typename T, int Dim>
-    static T apply(const pybind11::detail::unchecked_reference<T, Dim>& image,
-                   const std::array<int, Dim>& voxel_position,
-                   T background_value)
-    {
-        for (int l = 0; l < Dim; ++l)
-        {
-            if (voxel_position[l] < 0 || voxel_position[l] >= image.shape(l))
-            {
-                return background_value;
-            }
-        }
-        return detail::get_image_value(image, voxel_position);
-    }
-};
-
-/*! \brief Apply Func to the given data and position.
- *
- *  @param[in] chunk  N-dimensional array data for the interpolation. Needs
- *                    the right number of points in each dimension, e.g. 4
- *                    for cubic interpolation. Should be nested arrays in C
- *                    order.
- *  @param[in] x      The first coordinate value of the N-dimensional
- *                    position at which to interpolate
- *  @param[in] xs     The last N-1 coordinate values of the N-dimensional
- *                    position. One argument for each dimension.
- *
- *  @returns          The interpolation value
- *
- *  @tparam Func       The interpolation order func
- *  @tparam Ts        The type of the position coordinate values. This is
- *                    enforced to be double
- */
-template <typename Func, typename... Ts>
-static typename Func::VALUE_TYPE
-apply_func(const Data<Func, sizeof...(Ts) + 1>& chunk, double x, Ts... xs)
-{
-    return detail::apply_func_impl(
-        std::make_index_sequence<Func::NUMBER_OF_VALUES>{}, chunk, x, xs...);
-}
-
-/*! \brief Extract interpolation patch from given data around given position.
- *
- *  Different interpolation schemes require a different number of points
- *  to operate. This function takes the appropriate chunk and fills it with
- *  data based on the information of the function given.
- *
- *  @param[in,out] chunk           N-dimensional array data for the
- *                                 interpolation. Needs the right number of
- *                                 points in each dimension, e.g. 4 for cubic
- *                                 interpolation.
- *  @param[in] image               The image from which to extract the data.
- *  @param[in, out] point_floored  The point in the image where to interpolate
- *                                 floored. Will point to the lower corner of
- *                                 the data grid used for the interpolation at
- *                                 the end.
- *  @param[in] background_value    The background value to use in case the value
- *                                 is outside the image domain (might be ignored
- *                                 depending on the boundary function used)
- *  @tparam Func                    The interpolation order func
- *  @tparam BoundaryFunc           The boundary type to use. E.g.
- *                                 ConstantBoundary
- *  @tparam Dim                    The dimensionality of the given image
- */
-template <typename Func, typename BoundaryFunc, int Dim>
-static void
-extract(Data<Func, Dim>& chunk,
-        const pybind11::detail::unchecked_reference<Func::template VALUE_TYPE,
-                                                    Dim>& image,
-        std::array<int, Dim>& point_floored,
-        Func::template VALUE_TYPE background_value)
-{
-    for (size_t l = 0; l < Dim; ++l)
-    {
-        point_floored[l] -= (Func::NUMBER_OF_VALUES - 2) / 2;
-    }
-
-    detail::extract_impl<Func, BoundaryFunc, Dim>(chunk, image, point_floored,
-                                                  background_value);
-}
 
 /*! \brief Namespace containing implementation details for the interpolation
  *         functionality.
  */
 namespace detail
 {
-/*! \brief Function to extract data from a pybind11 array using
- *         a std::array for indexing
- *  @param[in] image          The image from which to extract a value
- *  @param[in] array_indices  The location of the data point to extract
- *
- *  @returns                  The value at the given position
- *
- *  @tparam T                 The data type of the image
- *  @tparam Dim               The dimensions of the image
- */
-template <typename T, int Dim>
-T get_image_value(const pybind11::detail::unchecked_reference<T, Dim>& image,
-                  const std::array<int, Dim>& array_indices)
-{
-    return get_image_value_impl(image, array_indices,
-                                std::make_index_sequence<Dim>{});
-}
-
 /*! \brief Function to extract data from a pybind11 array using
  *         a std::array for indexing
  *
@@ -357,6 +240,24 @@ T get_image_value_impl(
     const std::array<int, Dim>& array_indices, std::index_sequence<I...>)
 {
     return image(array_indices[I]...);
+}
+
+/*! \brief Function to extract data from a pybind11 array using
+ *         a std::array for indexing
+ *  @param[in] image          The image from which to extract a value
+ *  @param[in] array_indices  The location of the data point to extract
+ *
+ *  @returns                  The value at the given position
+ *
+ *  @tparam T                 The data type of the image
+ *  @tparam Dim               The dimensions of the image
+ */
+template <typename T, int Dim>
+T get_image_value(const pybind11::detail::unchecked_reference<T, Dim>& image,
+                  const std::array<int, Dim>& array_indices)
+{
+    return get_image_value_impl<T, Dim>(image, array_indices,
+                                std::make_index_sequence<Dim>{});
 }
 
 /*! \brief Apply Func to the given data and position.
@@ -430,12 +331,12 @@ apply_func_impl(std::index_sequence<I...> indices,
 template <typename Func, typename BoundaryFunc, int Dim, typename... Ts>
 static void extract_impl(
     Data<Func, Dim>& chunk,
-    const pybind11::detail::unchecked_reference<Func::template VALUE_TYPE, Dim>&
+    const pybind11::detail::unchecked_reference<typename Func::VALUE_TYPE, Dim>&
         image,
     const std::array<int, Dim>& lower_corner,
-    Func::template VALUE_TYPE background_value, Ts... loop_indices)
+    typename Func::VALUE_TYPE background_value, Ts... loop_indices)
 {
-    for (int i = 0; i < Func::template NUMBER_OF_VALUES; ++i)
+    for (int i = 0; i < Func::NUMBER_OF_VALUES; ++i)
     {
         if constexpr (Dim == sizeof...(Ts) + 1)
         {
@@ -446,7 +347,7 @@ static void extract_impl(
                 voxel_position[l] += lower_corner[l];
             }
             chunk(loop_indices..., i) =
-                BoundaryFunc::apply(image, voxel_position, background_value);
+                BoundaryFunc::template apply<typename Func::VALUE_TYPE, Dim>(image, voxel_position, background_value);
         }
         else
         {
@@ -457,4 +358,105 @@ static void extract_impl(
     }
 }
 }; // namespace detail
+
+/*! \brief Struct for dealing with n-dimensional image boundaries by
+ *         returning a constant values for coordinates out of bounds.
+ */
+struct ConstantBoundary
+{
+    /*! \brief Apply the constant boundary to the given image and position.
+     *
+     *  @param[in] image            The image to sample
+     *  @param[in] voxel_position   The position at which to sample
+     *  @param[in] background_value The background value to use if the given
+     *                              position is out of bounds
+     *
+     *  @returns                    The value at the given position using the
+     *                              rules defined by ConstantBoundary for
+     *                              positions outside of the given image.
+     *
+     *  @tparam T                   The data type of the given image
+     *  @tparam Dim                 The dimensions of the given image
+     */
+    template <typename T, int Dim>
+    static T apply(const pybind11::detail::unchecked_reference<T, Dim>& image,
+                   const std::array<int, Dim>& voxel_position,
+                   T background_value)
+    {
+        for (int l = 0; l < Dim; ++l)
+        {
+            if (voxel_position[l] < 0 || voxel_position[l] >= image.shape(l))
+            {
+                return background_value;
+            }
+        }
+        return detail::get_image_value<T, Dim>(image, voxel_position);
+    }
+};
+
+/*! \brief Apply Func to the given data and position.
+ *
+ *  @param[in] chunk  N-dimensional array data for the interpolation. Needs
+ *                    the right number of points in each dimension, e.g. 4
+ *                    for cubic interpolation. Should be nested arrays in C
+ *                    order.
+ *  @param[in] x      The first coordinate value of the N-dimensional
+ *                    position at which to interpolate
+ *  @param[in] xs     The last N-1 coordinate values of the N-dimensional
+ *                    position. One argument for each dimension.
+ *
+ *  @returns          The interpolation value
+ *
+ *  @tparam Func       The interpolation order func
+ *  @tparam Ts        The type of the position coordinate values. This is
+ *                    enforced to be double
+ */
+template <typename Func, typename... Ts>
+static typename Func::VALUE_TYPE
+apply_func(const Data<Func, sizeof...(Ts) + 1>& chunk, double x, Ts... xs)
+{
+    return detail::apply_func_impl(
+        std::make_index_sequence<Func::NUMBER_OF_VALUES>{}, chunk, x, xs...);
+}
+
+/*! \brief Extract interpolation patch from given data around given position.
+ *
+ *  Different interpolation schemes require a different number of points
+ *  to operate. This function takes the appropriate chunk and fills it with
+ *  data based on the information of the function given.
+ *
+ *  @param[in,out] chunk           N-dimensional array data for the
+ *                                 interpolation. Needs the right number of
+ *                                 points in each dimension, e.g. 4 for cubic
+ *                                 interpolation.
+ *  @param[in] image               The image from which to extract the data.
+ *  @param[in, out] point_floored  The point in the image where to interpolate
+ *                                 floored. Will point to the lower corner of
+ *                                 the data grid used for the interpolation at
+ *                                 the end.
+ *  @param[in] background_value    The background value to use in case the value
+ *                                 is outside the image domain (might be ignored
+ *                                 depending on the boundary function used)
+ *  @tparam Func                    The interpolation order func
+ *  @tparam BoundaryFunc           The boundary type to use. E.g.
+ *                                 ConstantBoundary
+ *  @tparam Dim                    The dimensionality of the given image
+ */
+template <typename Func, typename BoundaryFunc, int Dim>
+static void
+extract(Data<Func, Dim>& chunk,
+        const pybind11::detail::unchecked_reference<typename Func::VALUE_TYPE,
+                                                    Dim>& image,
+        std::array<int, Dim>& point_floored,
+        typename Func::VALUE_TYPE background_value)
+{
+    for (size_t l = 0; l < Dim; ++l)
+    {
+        point_floored[l] -= (Func::NUMBER_OF_VALUES - 2) / 2;
+    }
+
+    detail::extract_impl<Func, BoundaryFunc, Dim>(chunk, image, point_floored,
+                                                  background_value);
+}
+
 }; // namespace interpolation

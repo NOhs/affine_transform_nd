@@ -8,14 +8,15 @@ add_subdirectory(extern/pybind11)
 if(MSVC)
     add_compile_options("/W4" "/Ox" "/fp:fast")
 endif()
-if(GCC)
-    add_compile_options("-Ofast")
+if(UNIX)
+    add_compile_options("-Ofast" "-std=c++17")
 endif()
+
+set(PYBIND11_CPP_STANDARD -std=c++17)
 
 pybind11_add_module(_affine_transform src/main.cpp)
 target_include_directories(_affine_transform PUBLIC "extern/eigen")
 target_include_directories(_affine_transform PUBLIC "include")
-set_property(TARGET _affine_transform PROPERTY CXX_STANDARD 17)
 
 if(OpenMP_CXX_FOUND)
     target_link_libraries(_affine_transform PUBLIC OpenMP::OpenMP_CXX)
