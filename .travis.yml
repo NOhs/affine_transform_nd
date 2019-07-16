@@ -1,0 +1,30 @@
+language: python
+
+matrix:
+  include:
+    - language: python
+      os: linux
+      python: 3.7
+      addons:
+        apt:
+          packages:
+            - ca-certificates
+            - libc++-dev
+            - g++-7
+            - libiomp-dev
+            - cmake
+          sources:
+          - sourceline: 'ppa:ubuntu-toolchain-r/test'
+      dist: trusty
+      
+install:
+  - pip3 install setuptools
+  - pip3 install codecov
+  - python3 setup.py develop
+  
+script:
+  - python3 -m coverage run setup.py test
+  - python3 -m coverage combine
+  
+after_sucess:
+  - codecov
