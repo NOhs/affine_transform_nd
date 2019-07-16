@@ -198,3 +198,12 @@ _deps
 #
 ###########
 .vscode/
+
+
+
+###########
+#
+## Misc
+#
+###########
+affine_transform/version.txt
