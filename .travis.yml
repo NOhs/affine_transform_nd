@@ -15,7 +15,7 @@ matrix:
             - cmake
           sources:
           - sourceline: 'ppa:ubuntu-toolchain-r/test'
-      dist: trusty
+      dist: xenial
       
 install:
   - pip3 install setuptools
