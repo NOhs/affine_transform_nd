@@ -99,13 +99,18 @@ with open(
 
 setup(
     name="affine_transform",
-    author="NOhs TobelRunner",
+    author="NOhs, TobelRunner",
     version=v,
     description="Easy to use multi-core affine transformations",
     long_description=long_description,
     license="MIT",
     ext_modules=[CMakeExtension("affine_transform")],
     package_data={"": ["version.txt"]},
+    classifiers=[
+        "Programming Language :: Python :: 3",
+        "Programming Language :: C++",
+        "License :: OSI Approved :: MIT License",
+    ],
     packages=find_packages(),
     cmdclass=dict(build_ext=CMakeBuild),
     zip_safe=False,
