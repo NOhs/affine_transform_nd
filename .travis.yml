@@ -21,10 +21,11 @@ install:
   - export CXX=g++-8
   - pip3 install setuptools
   - pip3 install codecov
+  - pip3 install pytest
   - python3 setup.py develop
   
 script:
-  - python3 -m coverage run setup.py test
+  - python3 -m coverage run -m pytest tests
   
 after_sucess:
   - codecov
