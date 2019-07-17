@@ -17,6 +17,12 @@ import sys
 
 sys.path.insert(0, os.path.abspath(".."))
 
+import subprocess
+
+read_the_docs_build = os.environ.get('READTHEDOCS', None) == 'True'
+
+if read_the_docs_build:
+    subprocess.call(['doxygen'], pwd=os.path.join(os.path.abspath("."), "cpp"))
 
 # -- Project information -----------------------------------------------------
 
