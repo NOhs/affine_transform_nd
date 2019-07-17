@@ -109,4 +109,7 @@ setup(
     packages=find_packages(),
     cmdclass=dict(build_ext=CMakeBuild),
     zip_safe=False,
+    install_requires=["numpy"],
+    setup_requires=["pytest-runner"],
+    tests_require=["numpy", "mgen", "pytest"],
 )
