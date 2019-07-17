@@ -15,7 +15,7 @@ matrix:
           sources:
           - sourceline: 'ppa:ubuntu-toolchain-r/test'
       dist: xenial
-      
+
 install:
   - export CC=gcc-8
   - export CXX=g++-8
@@ -23,9 +23,9 @@ install:
   - pip3 install codecov
   - pip3 install pytest
   - python3 setup.py develop
-  
+
 script:
-  - python3 -m coverage run -m pytest tests
-  
+  - python3 -m coverage run setup.py test
+
 after_sucess:
   - codecov
