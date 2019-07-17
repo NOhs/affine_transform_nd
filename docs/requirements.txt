@@ -1,2 +1,5 @@
 Sphinx>2
 breathe
+matplotlib
+mgen
+sphinx_rtd_theme
