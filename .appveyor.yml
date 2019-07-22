@@ -3,7 +3,7 @@ image: Visual Studio 2019
 platform:
   - x64
 
-build: Script
+build: off
 
 configuration:
   - Release
