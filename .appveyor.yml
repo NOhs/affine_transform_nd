@@ -15,6 +15,7 @@ install:
   - "%PYTHON%/python -m venv venv"
   - "venv/Scripts/activate.bat"
   - "%PYTHON%/python -m pip install codecov"
+  - "git submodule update --init --recursive"
 
 test_script:
   - "%PYTHON%/python setup.py test"
