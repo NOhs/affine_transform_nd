@@ -1,0 +1,22 @@
+image: Visual Studio 2019
+
+platform:
+  - x64
+
+build: off
+
+configuration:
+  - Release
+
+environment:
+  PYTHON: "C:\\Python36-x64"
+
+install:
+  - "%PYTHON%/python -m venv venv"
+  - "venv/Scripts/activate.bat"
+  - "%PYTHON%/python -m pip install codecov"
+  - "git submodule update --init --recursive"
+
+test_script:
+  - "%PYTHON%/python -m coverage run setup.py test"
+  - "%PYTHON%/python -m codecov"
