@@ -1,7 +1,7 @@
 Affine Transformation: C++17, OpenMP, Python
 ============================================
 
-|travis| |codecov| |rtd| |pypi| |license| |codacy| |black|
+|travis| |codecov| |rtd| |pypi| |license| |codacy| |black| |requirements|
 
 
 .. |travis| image:: https://travis-ci.org/NOhs/affine_transform_nd.svg?branch=master
@@ -28,6 +28,9 @@ Affine Transformation: C++17, OpenMP, Python
 .. |black| image:: https://img.shields.io/badge/code%20style-black-000000.svg
     :target: https://github.com/ambv/black
     :alt: code style
+.. |requirements| image:: https://requires.io/github/NOhs/affine_transform_nd/requirements.svg?branch=badges
+     :target: https://requires.io/github/NOhs/affine_transform_nd/requirements/?branch=badges
+     :alt: Requirements Status
 
 
 This project explores how C++17 and OpenMP can be combined to write a
