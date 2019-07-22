@@ -27,7 +27,7 @@ def transform(
 
     Furthermore, an option is available to choose how data is read from the
     given image, in case the affine transformation does not perfectly map pixels
-    from the given image to the output image. This is the `order`` of the interpolation.
+    from the given image to the output image. This is the `order` of the interpolation.
 
     Arguments
     ---------
