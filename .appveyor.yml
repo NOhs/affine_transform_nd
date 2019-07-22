@@ -12,11 +12,12 @@ environment:
   PYTHON: "C:\\Python36-x64"
 
 install:
+  - set PATH=%PYTHON%\\scripts;%PATH%
   - "%PYTHON%/python -m venv venv"
   - "venv/Scripts/activate.bat"
   - "%PYTHON%/python -m pip install codecov"
   - "git submodule update --init --recursive"
 
 test_script:
-  - "%PYTHON%/python -m coverage run setup.py test"
-  - "%PYTHON%/python -m codecov"
+  - "%PYTHON%/Scripts/coverage run setup.py test"
+  - "%PYTHON%/Scripts/codecov"
