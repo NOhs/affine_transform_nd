@@ -12,6 +12,7 @@ def transform(
     order="linear",
     origin=None,
     output_image=None,
+    output_image_origin=None,
     background_value=0.0,
 ):
     """
@@ -45,6 +46,10 @@ def transform(
     output_image : nd-array, optional
         The image used for storing the results. If not set, memory will be
         allocated internally
+    output_image_origin : vector, optional
+        If the `(0,0,0)` coordinate of the `output_image` should not coinside with the `(0,0,0)`
+        location of the `input_image`, this parameter can be given. E.g. if you want
+        to only extract a slice at `[:,:,x]`, this argument could be set to `(0,0,x)`
     background_value : optional
         The background value to use in case points outside the input image
         are sampled
@@ -91,10 +96,10 @@ def transform(
 
     if output_image is None:
         output_image = np.zeros(input_image.shape, input_image.dtype)
-    elif not input_image.shape == output_image.shape:
+    elif not input_image.ndim == output_image.ndim:
         raise ValueError(
-            f"The given output image has shape {output_image.shape}, but needs to have the same"
-            f" shape as the given input image with shape {input_image.shape}."
+            f"The given output image has dimension {output_image.ndim}, but needs to have the same"
+            f" dimension as the given input image with shape {input_image.ndim}."
         )
 
     if order == "linear":
@@ -105,6 +110,15 @@ def transform(
         raise ValueError(
             f'Order was given as "{order}". But only "cubic" and "linear" are valid options.'
         )
+
+    if output_image_origin is not None:
+        if len(output_image_origin) != input_image.ndim:
+            raise ValueError(
+                f"Given output image origin has dimension {len(output_image_origin)}, but needs to be"
+                f"the same as the dimension of the given input image which is {input_image.ndim}."
+            )
+
+        translation -= np.asarray(output_image_origin)
 
     # We transform the coordinate system, so we take the inverse
     linear_transformation = np.linalg.inv(linear_transformation)
