@@ -18,5 +18,5 @@ install:
   - "git submodule update --init --recursive"
 
 test_script:
-  - "%PYTHON%/python setup.py test"
+  - "%PYTHON%/python -m coverage run setup.py test"
   - "%PYTHON%/python -m codecov"
