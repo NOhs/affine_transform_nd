@@ -16,8 +16,8 @@ Affine Transformation: C++17, OpenMP, Python
 .. |rtd| image:: https://readthedocs.org/projects/affine-transform-nd/badge/?version=latest
     :target: https://affine-transform-nd.readthedocs.io/en/latest/?badge=latest
     :alt: ReadTheDocs Status
-.. |pypi| image:: https://badge.fury.io/py/affine_transform.svg
-    :target: https://badge.fury.io/py/affine_transform
+.. |pypi| image:: https://img.shields.io/pypi/v/affine_transform.svg?color=dark%20green
+    :target: https://pypi.org/project/affine_transform
     :alt: PyPI
 .. |license| image:: https://img.shields.io/github/license/NOhs/affine_transform_nd.svg?color=blue
     :target: https://opensource.org/licenses/MIT
