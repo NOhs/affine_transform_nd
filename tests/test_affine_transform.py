@@ -87,3 +87,18 @@ def test_rotation_multiple_90():
                 output = transform(image, rotation, (0,) * dim, origin=center)
                 # need some atol here since we are comparing exactly to 0
                 np.testing.assert_allclose(output, image, atol=1e-10)
+
+
+def test_extract_slice():
+    image = np.zeros((6,) * 3)
+    image[(slice(3, 6),) * 3] = 1
+    output_slice = np.empty((6, 6, 1))
+    output = transform(
+        image,
+        np.eye(3),
+        (0, 0, 0),
+        output_image=output_slice,
+        output_image_origin=(0, 0, 3),
+    )
+
+    np.testing.assert_allclose(output[:, :, 0], image[:, :, 3])
