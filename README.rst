@@ -1,6 +1,35 @@
 Affine Transformation: C++17, OpenMP, Python
 ============================================
 
+|travis| |codecov| |rtd| |pypi| |license| |codacy| |black|
+
+
+.. |travis| image:: https://travis-ci.org/NOhs/affine_transform_nd.svg?branch=master
+    :target: https://travis-ci.org/NOhs/affine_transform_nd
+    :alt: Travis Status
+.. |appveyor| image:: https://ci.appveyor.com/api/projects/status/bh3gsedf83576wus/branch/master?svg=true
+    :target: https://ci.appveyor.com/project/NOhs/affine-transform-nd/branch/master
+    :alt: AppVeyor Status
+.. |codecov| image:: https://codecov.io/gh/NOhs/affine_transform_nd/branch/master/graph/badge.svg
+    :target: https://codecov.io/gh/NOhs/affine_transform_nd
+    :alt: Codecov Status
+.. |rtd| image:: https://readthedocs.org/projects/affine-transform-nd/badge/?version=latest
+    :target: https://affine-transform-nd.readthedocs.io/en/latest/?badge=latest
+    :alt: ReadTheDocs Status
+.. |pypi| image:: https://badge.fury.io/py/affine_transform.svg
+    :target: https://badge.fury.io/py/affine_transform
+    :alt: PyPI
+.. |license| image:: https://img.shields.io/github/license/NOhs/affine_transform_nd.svg?color=blue
+    :target: https://opensource.org/licenses/MIT
+    :alt: license
+.. |codacy| image:: https://api.codacy.com/project/badge/Grade/e39c4c5b913d4237b77fa07f679ab521
+    :target: https://www.codacy.com/app/NOhs/affine_transform_nd?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=NOhs/affine_transform_nd&amp;utm_campaign=Badge_Grade
+    :alt: code quality
+.. |black| image:: https://img.shields.io/badge/code%20style-black-000000.svg
+    :target: https://github.com/ambv/black
+    :alt: code style
+
+
 This project explores how C++17 and OpenMP can be combined to write a
 surprisingly compact implementation of n-dimensional parallel affine
 transformations which are linked into Python via the ``affine_transform``
