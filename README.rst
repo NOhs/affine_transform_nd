@@ -1,7 +1,7 @@
 Affine Transformation: C++17, OpenMP, Python
 ============================================
 
-|travis| |codecov| |rtd| |pypi| |license| |codacy| |black| |requirements|
+|travis| |appveyor| |codecov| |rtd| |pypi| |license| |codacy| |black| |requirements|
 
 
 .. |travis| image:: https://travis-ci.org/NOhs/affine_transform_nd.svg?branch=master
