@@ -7,7 +7,7 @@ configuration:
   - Release
 
 environment:
-  - PYTHON: "C:\\Python36-x64"
+  PYTHON: "C:\\Python36-x64"
 
 install:
   - "%PYTHON%/python -m venv venv"
