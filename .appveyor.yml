@@ -19,4 +19,4 @@ install:
 
 test_script:
   - "%PYTHON%/python setup.py test"
-  - "codecov"
+  - "%PYTHON%/python -m codecov"
