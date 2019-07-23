@@ -132,5 +132,4 @@ setup(
     install_requires=["numpy"],
     setup_requires=["pytest-runner"],
     tests_require=["numpy", "mgen", "pytest"],
-    include_package_data=True,
 )
