@@ -120,7 +120,7 @@ setup(
     long_description=long_description,
     license="MIT",
     ext_modules=[CMakeExtension("affine_transform")],
-    package_data={"": ["version.txt"]},
+    package_data={"affine_transform": ["version.txt"]},
     classifiers=[
         "Programming Language :: Python :: 3",
         "Programming Language :: C++",
@@ -132,5 +132,4 @@ setup(
     install_requires=["numpy"],
     setup_requires=["pytest-runner"],
     tests_require=["numpy", "mgen", "pytest"],
-    include_package_data=True,
 )
