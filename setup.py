@@ -120,7 +120,7 @@ setup(
     long_description=long_description,
     license="MIT",
     ext_modules=[CMakeExtension("affine_transform")],
-    package_data={"": ["version.txt"]},
+    package_data={"affine_transform": ["version.txt"]},
     classifiers=[
         "Programming Language :: Python :: 3",
         "Programming Language :: C++",
