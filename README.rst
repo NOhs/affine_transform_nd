@@ -45,6 +45,7 @@ are supported:
 - Constant boundaries
 - Compiling code for arbitrarily dimensional data
 - Parallelism via OpenMP
+- Arbitrary shaped output arrays, allowing e.g. to only extract a transformed slice
 
 Short example usage
 -------------------
