@@ -1,7 +1,54 @@
 import mgen
 import numpy as np
+import pytest
 
 from affine_transform import transform
+
+
+def test_wrong_dimension_linear_transform():
+    for dim in range(1, 6):
+        image = np.ones((1,) * dim)
+        for d in (x for x in range(1, 6) if x != dim):
+            matrix = np.eye(5)
+            with pytest.raises(ValueError):
+                transform(image, matrix[:dim, :d], translation=(0,) * dim)
+            with pytest.raises(ValueError):
+                transform(image, matrix[:d, :dim], translation=(0,) * dim)
+            with pytest.raises(ValueError):
+                transform(image, matrix[:d, :d], translation=(0,) * dim)
+
+
+def test_wrong_translation_dimension():
+    for dim in range(1, 6):
+        image = np.ones((1,) * dim)
+        for d in (x for x in range(1, 6) if x != dim):
+            with pytest.raises(ValueError):
+                transform(image, np.eye(dim), translation=(0,) * d)
+
+
+def test_wrong_origin_dimension():
+    for dim in range(1, 6):
+        image = np.ones((1,) * dim)
+        for d in (x for x in range(1, 6) if x != dim):
+            with pytest.raises(ValueError):
+                transform(image, np.eye(dim), translation=(0,) * dim, origin=(0,) * d)
+
+
+def test_wrong_output_image_dim():
+    for dim in range(1, 6):
+        image = np.ones((1,) * dim)
+        for d in (x for x in range(1, 6) if x != dim):
+            output = np.ones((1,) * d)
+            with pytest.raises(ValueError):
+                transform(
+                    image, np.eye(dim), translation=(0,) * dim, output_image=output
+                )
+
+
+def test_wrong_order():
+    image = np.ones((1,))
+    with pytest.raises(ValueError):
+        transform(image, np.eye(1), translation=(0,), order="fantastic")
 
 
 def test_smallest_image():
