@@ -45,6 +45,14 @@ def test_wrong_output_image_dim():
                 )
 
 
+def test_wrong_output_image_origin_dim():
+    for dim in range(1, 6):
+        image = np.ones((1,) * dim)
+        for d in (x for x in range(1, 6) if x != dim):
+            with pytest.raises(ValueError):
+                transform(image, np.eye(dim), translation=(0,) * dim, output_image_origin=(0,) * d)
+
+
 def test_wrong_order():
     image = np.ones((1,))
     with pytest.raises(ValueError):
