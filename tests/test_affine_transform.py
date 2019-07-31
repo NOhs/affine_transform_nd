@@ -1,7 +1,67 @@
 import mgen
 import numpy as np
+import pytest
 
 from affine_transform import transform
+
+
+def test_wrong_dimension_linear_transform():
+    for dim in range(1, 6):
+        image = np.ones((1,) * dim)
+        for d in (x for x in range(1, 6) if x != dim):
+            matrix = np.eye(5)
+            with pytest.raises(ValueError):
+                transform(image, matrix[:dim, :d], translation=(0,) * dim)
+            with pytest.raises(ValueError):
+                transform(image, matrix[:d, :dim], translation=(0,) * dim)
+            with pytest.raises(ValueError):
+                transform(image, matrix[:d, :d], translation=(0,) * dim)
+
+
+def test_wrong_translation_dimension():
+    for dim in range(1, 6):
+        image = np.ones((1,) * dim)
+        for d in (x for x in range(1, 6) if x != dim):
+            with pytest.raises(ValueError):
+                transform(image, np.eye(dim), translation=(0,) * d)
+
+
+def test_wrong_origin_dimension():
+    for dim in range(1, 6):
+        image = np.ones((1,) * dim)
+        for d in (x for x in range(1, 6) if x != dim):
+            with pytest.raises(ValueError):
+                transform(image, np.eye(dim), translation=(0,) * dim, origin=(0,) * d)
+
+
+def test_wrong_output_image_dim():
+    for dim in range(1, 6):
+        image = np.ones((1,) * dim)
+        for d in (x for x in range(1, 6) if x != dim):
+            output = np.ones((1,) * d)
+            with pytest.raises(ValueError):
+                transform(
+                    image, np.eye(dim), translation=(0,) * dim, output_image=output
+                )
+
+
+def test_wrong_output_image_origin_dim():
+    for dim in range(1, 6):
+        image = np.ones((1,) * dim)
+        for d in (x for x in range(1, 6) if x != dim):
+            with pytest.raises(ValueError):
+                transform(
+                    image,
+                    np.eye(dim),
+                    translation=(0,) * dim,
+                    output_image_origin=(0,) * d,
+                )
+
+
+def test_wrong_order():
+    image = np.ones((1,))
+    with pytest.raises(ValueError):
+        transform(image, np.eye(1), translation=(0,), order="fantastic")
 
 
 def test_smallest_image():
@@ -87,6 +147,28 @@ def test_rotation_multiple_90():
                 output = transform(image, rotation, (0,) * dim, origin=center)
                 # need some atol here since we are comparing exactly to 0
                 np.testing.assert_allclose(output, image, atol=1e-10)
+
+
+def test_cubic_interpolation():
+    image = np.zeros((9,) * 1)
+    image[3] = 13.3
+    image_test = transform(image, np.eye(1), (1.7,), order="cubic")
+
+    def catmull_rom_interp(p0, p1, p2, p3, x):
+        return (
+            (-0.5 * p0 + 1.5 * p1 - 1.5 * p2 + 0.5 * p3) * (x ** 3)
+            + (p0 - 2.5 * p1 + 2 * p2 - 0.5 * p3) * (x ** 2)
+            + (-0.5 * p0 + 0.5 * p2) * x
+            + p1
+        )
+
+    image_padded = np.pad(image, 3, mode="constant", constant_values=0)
+    result_manual = np.zeros((9,))
+
+    for i in range(9):
+        result_manual[i] = catmull_rom_interp(*image_padded[i : i + 4], 0.3)
+
+    np.testing.assert_allclose(image_test, result_manual, atol=1e-10)
 
 
 def test_extract_slice():
