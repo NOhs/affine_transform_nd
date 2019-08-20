@@ -1,6 +1,6 @@
 
 Welcome to the documentation of: Affine Transform!
-============================================
+==================================================
 
 This documentation shows how to use the affine transformation
 functionality provided by the ``affine_transform`` module
@@ -13,5 +13,6 @@ contains sections about the C++ implementation for those interested.
 
    self
    how_to_use
+   benchmarks
    module_doc
    cpp_doc
