@@ -25,9 +25,17 @@ def transform(
     image of two spheres around their common center of mass instead of rotating around
     the image center or the original origin of the image data ("The lower left corner").
 
+    .. note:: The linear transformation is required to be invertible. Other properties
+              of the given matrix are not checked.
+
     Furthermore, an option is available to choose how data is read from the
     given image, in case the affine transformation does not perfectly map pixels
-    from the given image to the output image. This is the `order` of the interpolation.
+    from the given image to the output image. This is the ``order`` of the interpolation.
+
+    The data types of the input image can be anything that is convertible to :c:data:`np.float64<NPY_FLOAT64>`.
+    If :c:data:`np.float64<NPY_FLOAT64>` or :c:data:`numpy.float32<NPY_FLOAT32>` arrays are given as input or input and output
+    images, no copies are created. For all other input types, a :c:data:`np.float64<NPY_FLOAT64>` array
+    is generated and the output image (if given) has to be of type :c:data:`np.float64<NPY_FLOAT64>`.
 
     Arguments
     ---------
@@ -63,7 +71,9 @@ def transform(
     Raises
     ------
     ValueError
-        If the dimensions of the given inputs mismatch
+        If the dimensions of the given inputs mismatch, or the datatypes are incompatible
+    LinAlgError
+        If the given linear transformation is singular
 
     """
     # check dimensions
@@ -74,32 +84,40 @@ def transform(
             " for the given input image."
         )
 
+    dtype = input_image.dtype
+
+    if input_image.dtype != np.float64 and input_image.dtype != np.float32:
+        dtype = np.float64
+
     if not len(translation) == input_image.ndim:
         raise ValueError(
             f"The given translation has wrong dimensionality {len(translation)}"
             f" while the required dimensionality for the given input image is {input_image.ndim}."
         )
     else:
-        translation = np.asarray(translation)
+        translation = np.asarray(translation, dtype=dtype)
 
     if origin is None:
-        origin = np.fromiter(
-            ((x - 1) / 2 for x in input_image.shape), dtype=input_image.dtype
-        )
+        origin = np.fromiter(((x - 1) / 2 for x in input_image.shape), dtype=dtype)
     elif not len(origin) == input_image.ndim:
         raise ValueError(
             f"The given origin has wrong dimensionality {len(origin)}"
             f" while the required dimensionality for the given input image is {input_image.ndim}."
         )
     else:
-        origin = np.asarray(origin)
+        origin = np.asarray(origin, dtype=dtype)
 
     if output_image is None:
-        output_image = np.zeros(input_image.shape, input_image.dtype)
+        output_image = np.zeros(input_image.shape, dtype=dtype)
     elif not input_image.ndim == output_image.ndim:
         raise ValueError(
             f"The given output image has dimension {output_image.ndim}, but needs to have the same"
             f" dimension as the given input image with shape {input_image.ndim}."
+        )
+    elif not output_image.dtype == dtype:
+        raise ValueError(
+            f"The given output image has dtype {output_image.dtype}, which is incompatible with"
+            f" the input image dtype which requires the dtype {dtype}."
         )
 
     if order == "linear":
@@ -118,7 +136,7 @@ def transform(
                 f"the same as the dimension of the given input image which is {input_image.ndim}."
             )
 
-        translation -= np.asarray(output_image_origin)
+        translation -= np.asarray(output_image_origin, dtype=dtype)
 
     # We transform the coordinate system, so we take the inverse
     linear_transformation = np.linalg.inv(linear_transformation)
@@ -128,7 +146,7 @@ def transform(
     transform(
         origin,
         linear_transformation.T,  # columns
-        input_image,
+        input_image.astype(dtype),
         output_image,
         background_value,
     )

@@ -122,8 +122,16 @@ PYBIND11_MODULE(_affine_transform, transformation_module)
         transformation_module, "transform_cubic",
         get_function_description("cubic", "constant").c_str());
 
+    register_affine_transform<float, cubic, ConstantBoundary, 5>(
+        transformation_module, "transform_cubic",
+        get_function_description("cubic", "constant").c_str());
+
     /* register linear, constant up to dimension 5*/
     register_affine_transform<double, linear, ConstantBoundary, 5>(
+        transformation_module, "transform_linear",
+        get_function_description("linear", "constant").c_str());
+
+    register_affine_transform<float, linear, ConstantBoundary, 5>(
         transformation_module, "transform_linear",
         get_function_description("linear", "constant").c_str());
 }
