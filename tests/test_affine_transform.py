@@ -93,7 +93,7 @@ def test_float32():
 
 def test_different_input_argument_types():
     image = np.ones((1,), dtype=int)
-    output = transform(image, np.eye(1, dtype=int), translation=(0,))
+    transform(image, np.eye(1, dtype=int), translation=(0,))
 
 
 def test_smallest_image():
