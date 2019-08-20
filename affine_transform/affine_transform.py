@@ -64,7 +64,7 @@ def transform(
 
     Returns
     -------
-    nd-image
+    nd-array
         The given ``output_image`` or if not given a newly created array with the
         results
 
@@ -72,7 +72,8 @@ def transform(
     ------
     ValueError
         If the dimensions of the given inputs mismatch, or the datatypes are incompatible
-    LinAlgError
+
+    ~numpy.linalg.LinAlgError
         If the given linear transformation is singular
 
     """
