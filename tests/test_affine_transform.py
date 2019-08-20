@@ -64,6 +64,16 @@ def test_wrong_order():
         transform(image, np.eye(1), translation=(0,), order="fantastic")
 
 
+def test_wrong_dtype():
+    with pytest.raises(ValueError):
+        transform(
+            np.ones((1,)),
+            np.eye(1),
+            (0,),
+            output_image=np.zeros((1,), dtype=np.float32),
+        )
+
+
 def test_data_type_conversion():
     image = np.ones((1,), dtype=int)
     output = transform(
@@ -75,12 +85,11 @@ def test_data_type_conversion():
 def test_float32():
     image = np.ones((1,), dtype=np.float32)
     output_image = np.zeros((1,), dtype=np.float32)
-    output = transform(
-        image, np.eye(1), (0,), output_image=output_image
-    )
+    output = transform(image, np.eye(1), (0,), output_image=output_image)
     assert output == 1
     assert output.dtype == np.float32
     assert output_image == 1
+
 
 def test_different_input_argument_types():
     image = np.ones((1,), dtype=int)
