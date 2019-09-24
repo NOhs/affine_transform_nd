@@ -122,9 +122,9 @@ def transform(
         )
 
     if order == "linear":
-        transform = _affine_transform.transform_linear
+        _transform = _affine_transform.transform_linear
     elif order == "cubic":
-        transform = _affine_transform.transform_cubic
+        _transform = _affine_transform.transform_cubic
     else:
         raise ValueError(
             f'Order was given as "{order}". But only "cubic" and "linear" are valid options.'
@@ -144,10 +144,10 @@ def transform(
 
     origin = (linear_transformation @ (-translation - origin)) + origin
 
-    transform(
+    _transform(
         origin,
         linear_transformation.T,  # columns
-        input_image.astype(dtype),
+        input_image.astype(dtype, copy=False),
         output_image,
         background_value,
     )
