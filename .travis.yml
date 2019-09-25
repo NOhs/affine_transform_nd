@@ -6,7 +6,8 @@ python:
 
 matrix:
   include:   
-    - addons:
+    - name: "gcc-5"
+      addons:
         apt:
           packages:
             - ca-certificates
@@ -19,7 +20,8 @@ matrix:
       env:
          - MATRIX_EVAL="CC=gcc-5 && CXX=g++-5"
 
-    - addons:
+    - name: "gcc-6"
+      addons:
         apt:
           packages:
             - ca-certificates
@@ -32,7 +34,8 @@ matrix:
       env:
          - MATRIX_EVAL="CC=gcc-6 && CXX=g++-6"
          
-    - addons:
+    - name: "gcc-7"
+      addons:
         apt:
           packages:
             - ca-certificates
@@ -45,7 +48,8 @@ matrix:
       env:
          - MATRIX_EVAL="CC=gcc-7 && CXX=g++-7"
 
-    - addons:
+    - name: "gcc-8"
+      addons:
         apt:
           packages:
             - ca-certificates
@@ -58,7 +62,8 @@ matrix:
       env:
          - MATRIX_EVAL="CC=gcc-8 && CXX=g++-8"
 
-    - addons:
+    - name: "gcc-9"
+      addons:
         apt:
           packages:
             - ca-certificates
