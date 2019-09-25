@@ -1,7 +1,7 @@
 Affine Transformation: C++17, OpenMP, Python
 ============================================
 
-|travis| |appveyor| |codecov| |rtd| |pypi| |license| |codacy| |black| |requirements|
+|travis| |appveyor| |codecov| |rtd| |pypi| |python_vers| |GCC| |license| |codacy| |black| |requirements|
 
 
 .. |travis| image:: https://travis-ci.org/NOhs/affine_transform_nd.svg?branch=master
@@ -19,6 +19,10 @@ Affine Transformation: C++17, OpenMP, Python
 .. |pypi| image:: https://img.shields.io/pypi/v/affine_transform.svg?color=dark%20green
     :target: https://pypi.org/project/affine_transform
     :alt: PyPI
+.. |python_vers| image:: https://img.shields.io/pypi/pyversions/affine_transform   
+    :alt: PyPI - Python Version
+.. |GCC| image:: https://img.shields.io/badge/GCC-6%20%7C%207%20%7C%208%20%7C%209-blue
+    :alt: Compiler Version
 .. |license| image:: https://img.shields.io/github/license/NOhs/affine_transform_nd.svg?color=blue
     :target: https://opensource.org/licenses/MIT
     :alt: license
@@ -28,8 +32,8 @@ Affine Transformation: C++17, OpenMP, Python
 .. |black| image:: https://img.shields.io/badge/code%20style-black-000000.svg
     :target: https://github.com/ambv/black
     :alt: code style
-.. |requirements| image:: https://requires.io/github/NOhs/affine_transform_nd/requirements.svg?branch=badges
-     :target: https://requires.io/github/NOhs/affine_transform_nd/requirements/?branch=badges
+.. |requirements| image:: https://requires.io/github/NOhs/affine_transform_nd/requirements.svg?branch=master
+     :target: https://requires.io/github/NOhs/affine_transform_nd/requirements/?branch=master
      :alt: Requirements Status
 
 
