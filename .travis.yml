@@ -1,26 +1,80 @@
 language: python
+os: linux
+python:
+  - "3.6"
+  - "3.7"
 
 matrix:
-  include:
-    - language: python
-      os: linux
-      python:
-        - 3.6
-        - 3.7
-      addons:
+  include:   
+    - addons:
         apt:
           packages:
             - ca-certificates
             - libc++-dev
-            - g++-8
             - libiomp-dev
+            - g++-5
           sources:
-          - sourceline: 'ppa:ubuntu-toolchain-r/test'
-      dist: xenial
+            - sourceline: 'ppa:ubuntu-toolchain-r/test'
+          dist: xenial     
+      env:
+         - MATRIX_EVAL="CC=gcc-5 && CXX=g++-5"
+
+    - addons:
+        apt:
+          packages:
+            - ca-certificates
+            - libc++-dev
+            - libiomp-dev
+            - g++-6
+          sources:
+            - sourceline: 'ppa:ubuntu-toolchain-r/test'
+          dist: xenial 
+      env:
+         - MATRIX_EVAL="CC=gcc-6 && CXX=g++-6"
+         
+    - addons:
+        apt:
+          packages:
+            - ca-certificates
+            - libc++-dev
+            - libiomp-dev
+            - g++-7
+          sources:
+            - sourceline: 'ppa:ubuntu-toolchain-r/test'
+          dist: xenial
+      env:
+         - MATRIX_EVAL="CC=gcc-7 && CXX=g++-7"
+
+    - addons:
+        apt:
+          packages:
+            - ca-certificates
+            - libc++-dev
+            - libiomp-dev
+            - g++-8
+          sources:
+            - sourceline: 'ppa:ubuntu-toolchain-r/test'
+          dist: xenial
+      env:
+         - MATRIX_EVAL="CC=gcc-8 && CXX=g++-8"
+
+    - addons:
+        apt:
+          packages:
+            - ca-certificates
+            - libc++-dev
+            - libiomp-dev
+            - g++-9
+          sources:
+            - sourceline: 'ppa:ubuntu-toolchain-r/test'
+          dist: xenial
+      env:
+         - MATRIX_EVAL="CC=gcc-9 && CXX=g++-9"
+
+before_install:
+  - eval "${MATRIX_EVAL}"
 
 install:
-  - export CC=gcc-8
-  - export CXX=g++-8
   - pip3 install setuptools
   - pip3 install codecov
   - pip3 install pytest
