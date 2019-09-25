@@ -1,4 +1,6 @@
-image: Visual Studio 2019
+image: 
+  - Visual Studio 2017
+  - Visual Studio 2019
 
 platform:
   - x64
@@ -9,7 +11,9 @@ configuration:
   - Release
 
 environment:
-  PYTHON: "C:\\Python36-x64"
+  matrix:
+    - PYTHON: "C:\\Python36-x64"
+    - PYTHON: "C:\\Python37-x64"
 
 install:
   - set PATH=%PYTHON%\\scripts;%PATH%
