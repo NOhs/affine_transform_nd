@@ -1,24 +1,31 @@
 language: python
+os: linux
+dist: xenial
+addons:
+  apt:
+    packages:
+      - ca-certificates
+      - libc++-dev
+      - libiomp-dev
+      - g++-6
+      - g++-7
+      - g++-8
+      - g++-9
+    sources:
+      - sourceline: 'ppa:ubuntu-toolchain-r/test'
 
-matrix:
-  include:
-    - language: python
-      os: linux
-      python: 3.7
-      addons:
-        apt:
-          packages:
-            - ca-certificates
-            - libc++-dev
-            - g++-8
-            - libiomp-dev
-          sources:
-          - sourceline: 'ppa:ubuntu-toolchain-r/test'
-      dist: xenial
+python:
+  - "3.6"
+  - "3.7"
+env:
+  - MATRIX_EVAL="export CC=gcc-7 && export CXX=g++-7"
+  - MATRIX_EVAL="export CC=gcc-8 && export CXX=g++-8"
+  - MATRIX_EVAL="export CC=gcc-9 && export CXX=g++-9"
+          
+before_install:
+  - eval "${MATRIX_EVAL}"
 
 install:
-  - export CC=gcc-8
-  - export CXX=g++-8
   - pip3 install setuptools
   - pip3 install codecov
   - pip3 install pytest
@@ -33,6 +40,7 @@ after_success:
 deploy:
   provider: pypi
   skip_cleanup: true
+  skip_existing: true
   user:
     secure: "VFu/N8o1KDXaRMIZmRNeWsR55dWCkghTD1HNscufXETrfz43jJUWDvC0jpwDrns0Csyb2XRHh9jG13w7KFqTXoZCroPBu8eVAeMFLsRJ0pmU7AJqpGvWBGoVNIyrj3NJ8nP1LZGvrOtEPnCVLm3sNWEZtGYSyWhJTUbVcIlvjLY2xwFnsZJkc5d7O/jkKGZ4wbW3DwRTC9z1Ywu2kadEnDdqE38KqwDu0KwrmaKF5odPrkRjnG/AONveNTv+akMYLE4RT8tmmpe4B+lAu/lnihk64Zemc0e1oQZy/MCqZ/G7QPyGQGLGHxK1f21RFIsSY8igoDzYmRT5t3p9NA7wAsbmomrBPQ/TK43eqPEJD9ZiNWs2+pDN5Hew8vTgUAjwRY/BuMQouVYFRq0py3gNspEf+ar2ojOMtRfKeZyl0KrIvZZmrdvEU1cOZDxDYmKu2e9ijgmMc2lfe0nSQHYP9xxj32o7DitN04Ls7/Lm/NFAUMCnerEqCVLzTnoaLPcg0roVt3GmuQ0W+dfJ7pByy7wkBRS1tuFdpvZu8TSWPH/M3kGpRt5/7wP3JbX1aMl6uz7GYOx9wCoblpXODxkPE2JbiSUmAIb2heYeVRVAKPoJkk7lNVNFcYcq7N3Rj3/nBf+eGZXx1/R87sgOsCjoLYHocQs3viOR2cQ8tfpp0q8="
   password:
