@@ -18,7 +18,6 @@ python:
   - "3.6"
   - "3.7"
 env:
-  - MATRIX_EVAL="export CC=gcc-6 && export CXX=g++-6"
   - MATRIX_EVAL="export CC=gcc-7 && export CXX=g++-7"
   - MATRIX_EVAL="export CC=gcc-8 && export CXX=g++-8"
   - MATRIX_EVAL="export CC=gcc-9 && export CXX=g++-9"
