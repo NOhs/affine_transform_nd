@@ -18,7 +18,7 @@ matrix:
             - sourceline: 'ppa:ubuntu-toolchain-r/test'
           dist: xenial     
       env:
-         - MATRIX_EVAL="CC=gcc-5 && CXX=g++-5"
+         - MATRIX_EVAL="export CC=gcc-5 && export CXX=g++-5"
 
     - name: "gcc-6"
       addons:
@@ -32,7 +32,7 @@ matrix:
             - sourceline: 'ppa:ubuntu-toolchain-r/test'
           dist: xenial 
       env:
-         - MATRIX_EVAL="CC=gcc-6 && CXX=g++-6"
+         - MATRIX_EVAL="export CC=gcc-6 && export CXX=g++-6"
          
     - name: "gcc-7"
       addons:
@@ -46,7 +46,7 @@ matrix:
             - sourceline: 'ppa:ubuntu-toolchain-r/test'
           dist: xenial
       env:
-         - MATRIX_EVAL="CC=gcc-7 && CXX=g++-7"
+         - MATRIX_EVAL="export CC=gcc-7 && export CXX=g++-7"
 
     - name: "gcc-8"
       addons:
@@ -60,7 +60,7 @@ matrix:
             - sourceline: 'ppa:ubuntu-toolchain-r/test'
           dist: xenial
       env:
-         - MATRIX_EVAL="CC=gcc-8 && CXX=g++-8"
+         - MATRIX_EVAL="export CC=gcc-8 && export CXX=g++-8"
 
     - name: "gcc-9"
       addons:
@@ -74,7 +74,7 @@ matrix:
             - sourceline: 'ppa:ubuntu-toolchain-r/test'
           dist: xenial
       env:
-         - MATRIX_EVAL="CC=gcc-9 && CXX=g++-9"
+         - MATRIX_EVAL="export CC=gcc-9 && export CXX=g++-9"
 
 before_install:
   - eval "${MATRIX_EVAL}"
