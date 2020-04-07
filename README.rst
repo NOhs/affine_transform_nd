@@ -61,8 +61,6 @@ Short example usage
     from affine_transform import transform
     from mgen import rotation_from_angle
 
-    import matplotlib.pyplot as plt
-
 
     # Create a simple white square in an image
     original = np.zeros((601, 401))
