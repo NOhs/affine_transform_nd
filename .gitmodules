@@ -5,4 +5,4 @@
 [submodule "extern/eigen"]
 	path = extern/eigen
 	url = https://gitlab.com/libeigen/eigen
-	branch = v3.4
+	branch = 3.4
