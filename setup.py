@@ -80,7 +80,7 @@ from setuptools_scm import get_version
 
 try:
     # If in git repository, get git label
-    v = get_version(root='..', relative_to=__file__)
+    v = get_version(root='.', relative_to=__file__)
 
     with open(
         os.path.join(

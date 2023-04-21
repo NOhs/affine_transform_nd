@@ -30,7 +30,7 @@ jobs:
         run: |
           python3 -m pip install --upgrade pip
           pip install setuptools codecov pytest
-          python3 setup.py develop
+          pip install -e .
 
       - name: Run tests and create coverage report
         run : |
