@@ -4,3 +4,5 @@
 [submodule "extern/eigen"]
 	path = extern/eigen
 	url = https://github.com/eigenteam/eigen-git-mirror.git
+[submodule "pybind11"]
+	branch = v2.10.4
