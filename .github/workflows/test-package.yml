@@ -2,6 +2,7 @@ name: Test Python 🐍 package 📦
 on: [push]
 jobs:
   Build-and-Test:
+    name: Build and test using Python ${{ matrix.python-version }} / gcc ${{ matrix.gcc-version }}
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -31,10 +32,9 @@ jobs:
           pip install setuptools codecov pytest
           python3 setup.py develop
 
-      - name: Run tests
+      - name: Run tests and create coverage report
         run : |
-          python3 -m coverage run setup.py test
+          coverage run -m pytest test
 
-      - name: Upload test coverage
-        run : |
-          codecov
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v3
