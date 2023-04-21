@@ -77,10 +77,14 @@ with open(os.path.join(this_directory, "README.rst"), encoding="utf-8") as f:
     long_description = f.read()
 
 from setuptools_scm import get_version
+from datetime import datetime
 
 try:
     # If in git repository, get git label
     v = get_version(root='.', relative_to=__file__)
+
+    if "+" in v:
+        v = v.split("+")[0] + datetime.today().strftime("%Y%m%d%H%M%S")
 
     with open(
         os.path.join(
