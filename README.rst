@@ -1,12 +1,12 @@
 Affine Transformation: C++17, OpenMP, Python
 ============================================
 
-|travis| |appveyor| |codecov| |rtd| |pypi| |python_vers| |GCC| |license| |codacy| |black| |requirements|
+|test| |appveyor| |codecov| |rtd| |pypi| |python_vers| |GCC| |license| |codacy| |black|
 
 
-.. |travis| image:: https://travis-ci.org/NOhs/affine_transform_nd.svg?branch=master
-    :target: https://travis-ci.org/NOhs/affine_transform_nd
-    :alt: Travis Status
+.. |test| image:: https://github.com/NOhs/mgen/actions/workflows/test.yml/badge.svg
+    :target: https://github.com/NOhs/mgen/actions/workflows/test.yml
+    :alt: Test Status
 .. |appveyor| image:: https://ci.appveyor.com/api/projects/status/bh3gsedf83576wus/branch/master?svg=true
     :target: https://ci.appveyor.com/project/NOhs/affine-transform-nd/branch/master
     :alt: AppVeyor Status
@@ -19,9 +19,9 @@ Affine Transformation: C++17, OpenMP, Python
 .. |pypi| image:: https://img.shields.io/pypi/v/affine_transform.svg?color=dark%20green
     :target: https://pypi.org/project/affine_transform
     :alt: PyPI
-.. |python_vers| image:: https://img.shields.io/pypi/pyversions/affine_transform   
+.. |python_vers| image:: https://img.shields.io/pypi/pyversions/affine_transform
     :alt: PyPI - Python Version
-.. |GCC| image:: https://img.shields.io/badge/GCC-6%20%7C%207%20%7C%208%20%7C%209-blue
+.. |GCC| image:: https://img.shields.io/badge/GCC-9%20|%2010%20|%2011%20|%2012-blue
     :alt: Compiler Version
 .. |license| image:: https://img.shields.io/github/license/NOhs/affine_transform_nd.svg?color=blue
     :target: https://opensource.org/licenses/MIT
@@ -32,10 +32,6 @@ Affine Transformation: C++17, OpenMP, Python
 .. |black| image:: https://img.shields.io/badge/code%20style-black-000000.svg
     :target: https://github.com/ambv/black
     :alt: code style
-.. |requirements| image:: https://requires.io/github/NOhs/affine_transform_nd/requirements.svg?branch=master
-     :target: https://requires.io/github/NOhs/affine_transform_nd/requirements/?branch=master
-     :alt: Requirements Status
-
 
 This project explores how C++17 and OpenMP can be combined to write a
 surprisingly compact implementation of n-dimensional parallel affine
