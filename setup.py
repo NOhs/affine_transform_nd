@@ -76,19 +76,15 @@ this_directory = os.path.abspath(os.path.dirname(__file__))
 with open(os.path.join(this_directory, "README.rst"), encoding="utf-8") as f:
     long_description = f.read()
 
-from subprocess import check_output, CalledProcessError
+from setuptools_scm import get_version
+from datetime import datetime
 
 try:
     # If in git repository, get git label
-    v = (
-        check_output(
-            ["git", "describe", "--always", "--dirty", "--tags"], cwd=this_directory
-        )
-        .decode("utf-8")
-        .strip()
-    )
-    if not "." in v:
-        v = "0.0.0"
+    v = get_version(root='.', relative_to=__file__)
+
+    if "+" in v:
+        v = v.split("+")[0] + datetime.today().strftime("%Y%m%d%H%M%S")
 
     with open(
         os.path.join(
@@ -100,7 +96,7 @@ try:
         encoding="utf-8",
     ) as f:
         f.write(v)
-except CalledProcessError:
+except LookupError:
     # Otherwise get version from version.txt (sdist for example)
     with open(
         os.path.join(
@@ -118,21 +114,22 @@ setup(
     version=v,
     url="https://github.com/NOhs/affine_transform_nd",
     description="Easy to use multi-core affine transformations",
-    python_requires='>=3.6',
+    python_requires='>=3.8',
     long_description=long_description,
     license="MIT",
     ext_modules=[CMakeExtension("affine_transform")],
     package_data={"affine_transform": ["version.txt"]},
     classifiers=[
-        "Programming Language :: Python :: 3.6",
-        "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
         "Programming Language :: C++",
         "License :: OSI Approved :: MIT License",
     ],
     packages=find_packages(),
     cmdclass=dict(build_ext=CMakeBuild),
     zip_safe=False,
-    install_requires=["numpy"],
-    setup_requires=["pytest-runner"],
+    install_requires=["numpy", "mgen", "setuptools_scm"],
+    setup_requires=["pytest-runner", "setuptools_scm"],
     tests_require=["numpy", "mgen", "pytest"],
 )
