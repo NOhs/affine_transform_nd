@@ -1,15 +1,15 @@
 Affine Transformation: C++17, OpenMP, Python
 ============================================
 
-|test| |appveyor| |codecov| |rtd| |pypi| |python_vers| |GCC| |license| |codacy| |black|
+|test| |windows_test| |codecov| |rtd| |pypi| |python_vers| |GCC| |license| |codacy| |black|
 
 
 .. |test| image:: https://github.com/NOhs/mgen/actions/workflows/test.yml/badge.svg
     :target: https://github.com/NOhs/mgen/actions/workflows/test.yml
     :alt: Test Status
-.. |appveyor| image:: https://ci.appveyor.com/api/projects/status/bh3gsedf83576wus/branch/master?svg=true
-    :target: https://ci.appveyor.com/project/NOhs/affine-transform-nd/branch/master
-    :alt: AppVeyor Status
+.. |windows_test| image:: https://github.com/NOhs/affine_transform_nd/actions/workflows/test-package-windows.yml/badge.svg
+    :target: https://github.com/NOhs/affine_transform_nd/actions/workflows/test-package-windows.yml
+    :alt: Windows Status
 .. |codecov| image:: https://codecov.io/gh/NOhs/affine_transform_nd/branch/master/graph/badge.svg
     :target: https://codecov.io/gh/NOhs/affine_transform_nd
     :alt: Codecov Status
