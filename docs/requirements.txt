@@ -1,4 +1,4 @@
-Sphinx>2
+Sphinx<7
 breathe
 matplotlib
 mgen
