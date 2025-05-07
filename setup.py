@@ -25,12 +25,11 @@ class CMakeBuild(build_ext):
                 + ", ".join(e.name for e in self.extensions)
             )
 
-        if platform.system() == "Windows":
-            cmake_version = LooseVersion(
-                re.search(r"version\s*([\d.]+)", out.decode()).group(1)
-            )
-            if cmake_version < "3.9.0":
-                raise RuntimeError("CMake >= 3.9.0 is required on Windows")
+        cmake_version = LooseVersion(
+            re.search(r"version\s*([\d.]+)", out.decode()).group(1)
+        )
+        if cmake_version < "3.15.0":
+            raise RuntimeError("CMake >= 3.15.0 is required (found version {})".format(cmake_version))
 
         for ext in self.extensions:
             self.build_extension(ext)
@@ -43,6 +42,8 @@ class CMakeBuild(build_ext):
         cmake_args = [
             "-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=" + extdir,
             "-DPYTHON_EXECUTABLE=" + sys.executable,
+            # Add the policy version setting directly here
+            "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
         ]
 
         cfg = "Debug" if self.debug else "Release"
@@ -60,16 +61,20 @@ class CMakeBuild(build_ext):
             build_args += ["--", "-j2"]
 
         env = os.environ.copy()
-        # env['CXXFLAGS'] = '{} -DVERSION_INFO=\\"{}\\"'.format(env.get('CXXFLAGS', ''),
-        #                                                     self.distribution.get_version())
         if not os.path.exists(self.build_temp):
             os.makedirs(self.build_temp)
-        subprocess.check_call(
-            ["cmake", ext.sourcedir] + cmake_args, cwd=self.build_temp, env=env
-        )
-        subprocess.check_call(
-            ["cmake", "--build", "."] + build_args, cwd=self.build_temp
-        )
+        
+        try:
+            subprocess.check_call(
+                ["cmake", ext.sourcedir] + cmake_args, cwd=self.build_temp, env=env
+            )
+            subprocess.check_call(
+                ["cmake", "--build", "."] + build_args, cwd=self.build_temp
+            )
+        except subprocess.CalledProcessError as e:
+            print("Error during CMake build. Make sure all dependencies like pybind11 are properly set up.")
+            print("You can try setting CMAKE_POLICY_VERSION_MINIMUM=3.5 environment variable if you see policy errors.")
+            raise e
 
 
 this_directory = os.path.abspath(os.path.dirname(__file__))
