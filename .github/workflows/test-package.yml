@@ -6,8 +6,8 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ["3.8", "3.9", "3.10", "3.11"]
-        gcc-version: ["9", "10", "11", "12"]
+        python-version: ["3.11", "3.12", "3.13"]
+        gcc-version: ["12", "13", "14", "15"]
 
     steps:
       - name: Checkout Repository
