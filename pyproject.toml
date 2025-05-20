@@ -6,8 +6,8 @@ dependencies = [
 ]
 description = "Easy to use multi-core affine transformations"
 authors = [
-  { name = "NOhs", email = "nicholas.ohs@outlook.com" },
-  { name = "TobelRunner", email = "nicholas.ohs@outlook.com" }
+  { name = "NOhs"},
+  { name = "TobelRunner"}
 ]
 readme = "README.rst"
 license = "MIT"
