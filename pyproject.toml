@@ -1,3 +1,47 @@
+[project]
+name = "affine_transform"
+dynamic = ["version"]
+dependencies = [
+    "numpy"
+]
+description = "Easy to use multi-core affine transformations"
+authors = [
+  { name = "NOhs"},
+  { name = "TobelRunner"}
+]
+readme = "README.rst"
+license = "MIT"
+requires-python = ">=3.8"
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Programming Language :: C++",
+  "Operating System :: OS Independent"
+]
+
+[project.optional-dependencies]
+test = [
+    "pytest>=7.0",
+    "coverage",
+    "codecov",
+    "mgen"
+]
+
+[project.urls]
+Homepage = "https://github.com/NOhs/affine_transform_nd"
+Documentation = "https://affine-transform-nd.readthedocs.io"
+Repository = "https://github.com/NOhs/affine_transform_nd.git"
+
 [build-system]
-requires = ["setuptools", "setuptools_scm", "cmake"]
-build-backend = "setuptools.build_meta"
+requires = ["scikit-build-core", "setuptools_scm[toml]>=7"]
+build-backend = "scikit_build_core.build"
+
+[tool.scikit-build.wheel]
+packages = ["affine_transform"]
+
+[tool.setuptools_scm]
+version_scheme = "post-release"
+local_scheme = "node-and-date"
+write_to = "affine_transform/_version.py"
+
+[tool.scikit-build]
+metadata.version.provider = "scikit_build_core.metadata.setuptools_scm"

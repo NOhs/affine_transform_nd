@@ -1,10 +1,7 @@
-graft extern/eigen/Eigen
-include extern/pybind11/CMakeLists.txt
-graft extern/pybind11/include
-graft extern/pybind11/tools
-include affine_transform/version.txt
-graft src
-graft include
+include src/main.cpp
+include include/affine_transform.hpp
+include include/interpolation.hpp
 include CMakeLists.txt
 graft docs
 include LICENSE
+include README.rst
