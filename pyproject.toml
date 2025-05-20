@@ -18,6 +18,14 @@ classifiers = [
   "Operating System :: OS Independent"
 ]
 
+[project.optional-dependencies]
+test = [
+    "pytest>=7.0",
+    "coverage",
+    "codecov",
+    "mgen"
+]
+
 [project.urls]
 Homepage = "https://github.com/NOhs/affine_transform_nd"
 Documentation = "https://affine-transform-nd.readthedocs.io"
